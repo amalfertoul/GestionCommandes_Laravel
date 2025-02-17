@@ -17,6 +17,11 @@ class CommandeController extends Controller
     // }
     public function index(Request $request)
     {
+
+        $clientId = $request->get('client_id');
+        $search = $request->get('search');
+        $query = Commande::with('client', 'produits');
+
         
         // Récupérer tous les clients pour le formulaire de recherche
  
@@ -28,15 +33,28 @@ class CommandeController extends Controller
         //recherche
         $clientId = $request->input('client_id'); // Récupérer l'ID du client sélectionné
 
+
+         // Filtrer les commandes en fonction du client sélectionné
+
+        if ($clientId) {
+            $query->where('client_id', $clientId);
+        }
+
         if (!$clientId) {
             $commandes = Commande::paginate(10);
         } else {
             $commandes = Commande::where('client_id', $clientId)->paginate(10);
         }
-     
+    
+        $produitsQuery = Produit::query();
+            if ($search) {
+                $produitsQuery->where('nom', 'LIKE', "%{$search}%")
+                            ->orWhere('description', 'LIKE', "%{$search}%");
+            }
+        $produits = $produitsQuery->get();
 
         // Passer les commandes, les clients et le nombre de commandes par client à la vue
-        return view('commandes.index', compact('commandes', 'commandesParClient', 'clients','clientId'));
+        return view('commandes.index', compact('commandes', 'commandesParClient', 'clients','clientId','produits', 'search'));
     }
 
     public function create() {
@@ -61,11 +79,15 @@ class CommandeController extends Controller
         return redirect()->route('commandes.index')->with('success', 'Commande créée avec succès!');
     }
 
-    public function show($id) {
-        $commande = Commande::with('produits')->findOrFail($id); 
-        $produits = Produit::all();
-        return view('commandes.show', compact('commande', 'produits'));
-    }
+    // public function show($id) {
+    //     $commande = Commande::with('client', 'produits')->findOrFail($id);
+    //     $produits = Produit::all();
+    //     return view('commandsaes.index', compact('commande', 'produits'));
+    // }
+
+
+
+
 
     public function edit(Commande $commande) {
         $clients = Client::all();

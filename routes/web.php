@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Session;
+
 // use App\Http\Controllers\Controleur_1;
 
 /*
@@ -27,6 +30,7 @@ Route::get('/commandes', [CommandeController::class, 'index'])->name('commandes.
 Route::get('/commandes/create', [CommandeController::class, 'create'])->name('commandes.create');
 Route::post('/commandes', [CommandeController::class, 'store'])->name('commandes.store');
 Route::get('/commandes/{commande}', [CommandeController::class, 'show'])->name('commandes.show');
+
 Route::get('/commandes/{commande}/edit', [CommandeController::class, 'edit'])->name('commandes.edit');
 Route::put('/commandes/{commande}', [CommandeController::class, 'update'])->name('commandes.update'); 
 Route::delete('/commandes/{commande}', [CommandeController::class, 'destroy'])->name('commandes.destroy');
@@ -44,3 +48,30 @@ Route::delete('/commandes/{commande}/produits/{produit}', [CommandeController::c
 
 
 Route::post('/commandes/{commande}/add-product', [CommandeController::class, 'addProduct'])->name('commandes.addProduct');
+
+
+
+
+
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/profile', function () {
+    if (!Session::has('user')) {
+        return redirect('/login')->with('error', 'Veuillez vous connecter.');
+    }
+    return view('auth.profile');
+})->name('profile');
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/admin', function () {
+    if (!Session::has('user') || Session::get('user')->profil !== 'admin') {
+        return redirect('/login')->with('error', 'Accès réservé aux administrateurs.');
+    }
+    return view('admin.dashboard');
+})->name('admin.dashboard');
