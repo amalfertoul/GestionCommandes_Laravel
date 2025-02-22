@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Compte;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\FirstNotification;
+
 
 class AuthController extends Controller
 {
@@ -52,10 +55,21 @@ public function adminDashboard()
         ]);
 
         $compte = Compte::create([
-            'login' => $request->login,
+            'login' => $request->login,        
+            'email' => $request->gmail,
             'mot_passe' => $request->mot_passe,
             'profil' => $request->profil,
         ]);
+        ////////////////envoi gmail code////////////////////
+        $detail = [
+            "greeting" => $request->username,
+            "body" => "test",
+            "actiontext" => "thanks for subscribing",
+            "actionurl" => $request->gmail,
+            "lastline" => "this last line"
+        ];
+
+        Notification::send($compte, new firstNotification($detail));
 
         Session::put('user', $compte);
 

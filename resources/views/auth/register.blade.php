@@ -5,6 +5,7 @@
 <form action="{{ route('register') }}" method="POST">
     @csrf
     <input type="text" name="login" placeholder="Login" required>
+    <input type="text" name="gmail" placeholder="gmail" required>
     <input type="password" name="mot_passe" placeholder="Mot de passe" required>
     <select name="profil">
         <option value="client">Client</option>

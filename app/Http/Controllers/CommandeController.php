@@ -82,7 +82,7 @@ class CommandeController extends Controller
     // public function show($id) {
     //     $commande = Commande::with('client', 'produits')->findOrFail($id);
     //     $produits = Produit::all();
-    //     return view('commandsaes.index', compact('commande', 'produits'));
+    //     return view('commandes.show', compact('commande', 'produits'));
     // }
 
 

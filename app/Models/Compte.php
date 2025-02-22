@@ -5,12 +5,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+
 
 class Compte extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['login', 'mot_passe', 'profil'];
+    use Notifiable;
+    protected $fillable = ['login', 'mot_passe', 'profil', 'email'];
 
     protected $hidden = ['mot_passe'];
 

@@ -29,7 +29,6 @@ use App\Http\Controllers\CommandeController;
 Route::get('/commandes', [CommandeController::class, 'index'])->name('commandes.index');
 Route::get('/commandes/create', [CommandeController::class, 'create'])->name('commandes.create');
 Route::post('/commandes', [CommandeController::class, 'store'])->name('commandes.store');
-Route::get('/commandes/{commande}', [CommandeController::class, 'show'])->name('commandes.show');
 
 Route::get('/commandes/{commande}/edit', [CommandeController::class, 'edit'])->name('commandes.edit');
 Route::put('/commandes/{commande}', [CommandeController::class, 'update'])->name('commandes.update'); 
